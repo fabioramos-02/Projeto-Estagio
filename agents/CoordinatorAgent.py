@@ -27,7 +27,7 @@ class CoordinatorAgent:
 
                 for img_info in imagens_sem_alt:
                     img_url = img_info['img_url']
-                    alt_text = img_info['alt_text']
+                    alt_text = img_info['alt_text_gerado']  # Corrigido para pegar o texto gerado pela IA
                     print(f"Imagem {img_url}: texto alternativo sugerido '{alt_text}'")
             
             except Exception as e:
