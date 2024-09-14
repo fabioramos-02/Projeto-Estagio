@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 
+import os
+
 # Configura o logging
 logging.basicConfig(filename='imagem_report.log',
                     level=logging.INFO,
