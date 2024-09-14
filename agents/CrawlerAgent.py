@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 class CrawlerAgent:
     def __init__(self):
         # Conecta ao banco de dados
-        self.conn = sqlite3.connect('gov_sites.db')
+        self.conn = sqlite3.connect('db/gov_sites.db')
 
     def get_sites(self):
         """Busca todas as URLs do banco de dados."""
