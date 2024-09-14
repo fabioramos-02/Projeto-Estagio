@@ -1,38 +1,69 @@
 import requests
 from bs4 import BeautifulSoup
+import logging
+
+# Configura o logging
+logging.basicConfig(filename='imagem_report.log',
+                    level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 def baixar_html(url):
-    # Faz uma requisição HTTP para a URL
-    response = requests.get(url)
-    
-    # Verifica se a requisição foi bem-sucedida
-    if response.status_code == 200:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
         return response.text
-    else:
-        print(f"Falha ao baixar a página: {response.status_code}")
+    except requests.RequestException as e:
+        logging.error(f"Falha ao baixar a página {url}: {e}")
         return None
 
+
 def analisar_html(html):
-    # Analisa o HTML usando BeautifulSoup
     soup = BeautifulSoup(html, 'html.parser')
-    
-    # Encontra todas as tags <img> no HTML
     imagens = soup.find_all('img')
-    
-    # Extrai as informações de cada imagem
+    imagens_sem_alt = []
+
     for i, img in enumerate(imagens):
         alt_text = img.get('alt')
         if alt_text:
-            print(f"Imagem {i + 1}: possui texto alternativo '{alt_text}'")
+            logging.info(f"Imagem {i + 1}: possui texto alternativo '{alt_text}'")
         else:
-            print(f"Imagem {i + 1}: NÃO possui texto alternativo")
+            logging.warning(f"Imagem {i + 1}: NÃO possui texto alternativo")
+            imagens_sem_alt.append(img)
 
-# URL alvo
-url = "https://exemplo.gov.br"
+    return imagens_sem_alt
 
-# Baixa o HTML da página
-html = baixar_html(url)
 
-# Se o HTML foi baixado com sucesso, realiza a análise
-if html:
-    analisar_html(html)
+def sugerir_texto_alternativo(imagem):
+    # Aqui você deve implementar a lógica de sugestão usando IA.
+    # Para simplificação, estamos retornando um texto padrão.
+    return "Texto alternativo sugerido pela IA"
+
+
+def corrigir_imagens_sem_alt(imagens_sem_alt):
+    for i, img in enumerate(imagens_sem_alt):
+        sugestao = sugerir_texto_alternativo(img)
+        logging.info(f"Imagem {i + 1}: sugerido texto alternativo '{sugestao}'")
+
+
+def processar_url(url):
+    html = baixar_html(url)
+    if html:
+        imagens_sem_alt = analisar_html(html)
+        if imagens_sem_alt:
+            corrigir_imagens_sem_alt(imagens_sem_alt)
+        else:
+            logging.info("Todas as imagens possuem texto alternativo.")
+    else:
+        logging.error("Não foi possível realizar a análise da página.")
+
+
+def main(urls):
+    for url in urls:
+        logging.info(f"Processando URL: {url}")
+        processar_url(url)
+
+
+if __name__ == "__main__":
+    urls = ["https://www.ms.gov.br/", "https://bioparquepantanal.ms.gov.br/"]
+    main(urls)
