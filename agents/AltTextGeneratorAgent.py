@@ -14,7 +14,9 @@ class AltTextGeneratorAgent:
             return "URL da imagem inválida."
 
         # Prompt otimizado para gerar descrições concisas e eficientes
-        prompt = f"Descreva de forma sucinta a imagem localizada em {image_url}."
+        #melhor o prompt para gerar um texto alternativo para a imagem com linguagem cidade acessível
+        
+        prompt = f"Gerar um texto alternativo para a imagem abaixo, que seja conciso e eficiente:\n\n{image_url}\n\nTexto alternativo:"
         
         try:
             response = openai.ChatCompletion.create(
