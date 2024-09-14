@@ -29,7 +29,7 @@ class AnalyzerAgent:
                 })
 
             # Caso o alt exista, mas esteja vazio ou sem sentido (ex: alt="imagem")
-            elif alt_text.lower() in ["imagem", "foto", ""]:
+            elif alt_text.lower() in ["imagem", "foto", "", " ", "sem descrição", "LOGO", "logo", "wpcontent"]:
                 # Também gera um novo texto alternativo para esse caso
                 alt_text_gerado = self.alt_text_generator.generate_alt_text(img_url)
 

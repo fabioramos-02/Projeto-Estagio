@@ -1,18 +1,31 @@
 import openai
+from dotenv import load_dotenv
+import os
 
 class AltTextGeneratorAgent:
     def __init__(self):
-        super().__init__()
-        openai.api_key = "sua_chave_api_aqui"  # Adicione sua chave API aqui
+        # Carrega as variáveis do arquivo .env
+        load_dotenv()
+        openai.api_key = os.getenv("OPENAI_API_KEY")  # Carrega a chave API da variável de ambiente
 
     def generate_alt_text(self, image_url):
-        # Implementação do método generate_alt_text com a nova interface da API
-        prompt = f"Descreva a imagem localizada em {image_url} de forma concisa."
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Utilize o modelo correto aqui
-            messages=[
-                {"role": "system", "content": "Você é um gerador de descrições de imagens."},
-                {"role": "user", "content": prompt}
-            ]
-        )
-        return response['choices'][0]['message']['content'].strip()
+        # Verifica se o image_url é válido
+        if not image_url or not image_url.startswith("http"):
+            return "URL da imagem inválida."
+
+        # Prompt otimizado para gerar descrições concisas e eficientes
+        prompt = f"Descreva de forma sucinta a imagem localizada em {image_url}."
+        
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "Gere uma breve descrição da imagem."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=50  # Limita o número de tokens para reduzir o custo
+            )
+            return response['choices'][0]['message']['content'].strip()
+
+        except Exception as e:
+            return f"Erro ao gerar descrição: {str(e)}"
