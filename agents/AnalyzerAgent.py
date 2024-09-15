@@ -42,3 +42,30 @@ class AnalyzerAgent:
                 })
 
         return imagens_sem_alt
+    
+    def analyze_background_images(self, html, site_url):
+        """Analisa o HTML em busca de divs com background-image e gera textos alternativos."""
+        soup = BeautifulSoup(html, 'html.parser')
+        divs_sem_alt = []
+
+        # Busca todas as divs que possuem background-image no estilo
+        for div in soup.find_all('div'):
+            style = div.get('style')
+            if style and 'background-image' in style:
+                # Extrai a URL da imagem do background-image
+                img_url = style.split('url(')[-1].split(')')[0].replace('"', '').replace("'", "")
+                
+                # Gera texto alternativo usando o AltTextGeneratorAgent
+                alt_text_gerado = self.alt_text_generator.generate_alt_text(img_url)
+
+                # Adiciona informações da div à lista
+                divs_sem_alt.append({
+                    'site_url': site_url,
+                    'img_url': img_url,
+                    'alt_text_gerado': alt_text_gerado,
+                    'tag_completa': str(div)  # Salva a tag completa como string
+                })
+
+        return divs_sem_alt
+
+
