@@ -2,3 +2,5 @@
 venv/
 .env
 .pytest_cache/
+#ignorar todo executavel pyc
+*.pyc
