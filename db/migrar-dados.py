@@ -15,7 +15,7 @@ def migrate_to_db(csv_file):
     ''')
 
     # Lê a planilha CSV
-    with open(csv_file, 'r') as file:
+    with open(csv_file, 'r', encoding="utf-8") as file:
         reader = csv.reader(file)
         next(reader)  # Pula o cabeçalho, se houver
         for row in reader:
