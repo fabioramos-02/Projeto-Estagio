@@ -1,6 +1,6 @@
 #não fazer commmit da pasta venv
 venv/
 .env
-.pytest_cache/
+__pycache__
 #ignorar todo executavel pyc
 *.pyc
