@@ -1,9 +1,12 @@
-from openai import OpenAI
+import openai
+from dotenv import load_dotenv
 import os
-client = OpenAI()
-client.api_key = os.getenv("OPENAI_API_KEY")  # Carrega a chave API da variável de ambiente
+
 class AltTextGeneratorAgent:
-       
+    def __init__(self):
+        # Carrega as variáveis do arquivo .env
+        load_dotenv()
+        openai.api_key = os.getenv("OPENAI_API_KEY")  # Carrega a chave API da variável de ambiente
 
     def generate_alt_text(self, image_url):
         # Verifica se o image_url é válido
@@ -16,8 +19,7 @@ class AltTextGeneratorAgent:
         prompt = f"Gerar um texto alternativo para a imagem abaixo, que seja conciso e eficiente:\n\n{image_url}\n\nTexto alternativo:"
         
         try:
-            response = client.chat.completions.create(
-                
+            response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "Gere uma breve descrição da imagem."},
