@@ -2,8 +2,11 @@ import openai
 import os
 
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Carrega a chave API da variável de ambiente
+
 class AltTextGeneratorAgent:
-       
+    def __init__(self):
+        # Carrega as variáveis do arquivo .env
+        openai.api_key = os.getenv("OPENAI_API_KEY")  # Carrega a chave API da variável de ambiente
 
     def generate_alt_text(self, image_url):
         # Verifica se o image_url é válido
