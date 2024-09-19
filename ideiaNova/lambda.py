@@ -12,7 +12,6 @@ def analyze_images(html, site_url):
 
         if not alt_text or alt_text.strip() == "":
             imagens_sem_alt.append({
-                'site_url': site_url,
                 'img_url': img_url,
                 'tag_completa': str(img)
             })
@@ -21,15 +20,9 @@ def analyze_images(html, site_url):
 
 def lambda_handler(event, context):
     try:
-        if 'body' not in event:
-            return {
-                "statusCode": 400,
-                "body": json.dumps({"error": "O campo 'body' está ausente do evento."})
-            }
-
-        data = json.loads(event['body'])
-        url = data.get('url', 'http://www.acadepol.ms.gov.br')  # Valor padrão
-        site_name = data.get('site_name', 'ACADEPOL')  # Valor padrão
+        # Checar se os parâmetros estão no evento diretamente
+        url = event.get('url', 'http://www.acadepol.ms.gov.br')  # Valor padrão
+        site_name = event.get('site_name', 'ACADEPOL')  # Valor padrão
 
         if not url:
             return {
@@ -52,7 +45,7 @@ def lambda_handler(event, context):
 
         return {
             "statusCode": 200,
-            "body": json.dumps(response_body, ensure_ascii=False)  # Resposta em JSON
+            "body": response_body  # Resposta direta em JSON
         }
 
     except Exception as e:
