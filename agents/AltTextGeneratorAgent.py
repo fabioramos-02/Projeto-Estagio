@@ -1,7 +1,7 @@
-from openai import OpenAI
+import openai
 import os
-client = OpenAI()
-client.api_key = os.getenv("OPENAI_API_KEY")  # Carrega a chave API da variável de ambiente
+
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Carrega a chave API da variável de ambiente
 class AltTextGeneratorAgent:
        
 
@@ -16,7 +16,7 @@ class AltTextGeneratorAgent:
         prompt = f"Gerar um texto alternativo para a imagem abaixo, que seja conciso e eficiente:\n\n{image_url}\n\nTexto alternativo:"
         
         try:
-            response = client.chat.completions.create(
+            response = openai.ChatCompletion.create(
                 
                 model="gpt-3.5-turbo",
                 messages=[
